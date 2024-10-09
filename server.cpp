@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <unistd.h>
+#include <cstring>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -16,7 +17,17 @@ void die(const char *msg) {
 }
 
 static void do_something(int connfd) {
-    // TO DO: implement anything to show server client handshake and communication.
+    char rbuf[64] = {};
+    ssize_t n = read(connfd, rbuf, sizeof(rbuf) - 1);
+    if (n<0) {
+        die("read() error");
+        return;
+    }
+
+    printf("client says: %s\n", rbuf);
+
+    char wbuf[] = "world";
+    write(connfd, wbuf, strlen(wbuf));
 }
 
 int main(){
